@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>更简单的写Java web项目</title>
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/color.css">
+<script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+</head>
+<body>
+	<table id="dg"></table>
+	<table id="dd"></table>
+
+	<script type="text/javascript">
+		$('#dg').datagrid({
+			url : '/generic/list?mapper=demoMapper',
+			method : 'get',
+			autoRowHeight : false,
+			striped : false,
+			fit : true,
+			fitColumns : true,
+			pagination : true,
+			singleSelect : true,
+			toolbar : [ {
+				iconCls : 'icon-edit',
+				text : '修改',
+				handler : function() {
+					var row = $('#dg').datagrid('getSelected');
+					
+					$('#dd').dialog({
+					    title: '修改内容',
+					    width: 650,
+					    height: 500,
+					    closed: false,
+					    cache: false,
+					    href: '/demo/modify.html',
+					    modal: true,
+					    buttons:[{
+							text:'保存',
+							handler:function() {
+								$("#ff").form("submit",{
+									url : "/generic/update",
+									queryParams : {
+										mapper : 'demoMapper'
+									},
+									onSubmit: function(param) {
+								    },
+								    success:function(data) {
+								    	$.messager.alert('提示','提交成功');
+								    	$("#dd").dialog('close');
+								    }
+								})
+							}
+						},{
+							text:'取消',
+							handler:function() {
+								
+								$("#dd").dialog('close');
+							}
+						}]
+					});
+				}
+			}],
+			columns : [ [ {
+				field : 'id',
+				hidden : true
+			}, {
+				field : 'name',
+				title : '标题',
+				width : '100'
+			}, {
+				field : 'description',
+				title : '内容',
+				width : '300',
+				styler: function(value, row, index) {
+					
+					return 'text-overflow:ellipsis';
+				}
+			} ] ]
+		});
+		
+	</script>
+</body>
+</html>

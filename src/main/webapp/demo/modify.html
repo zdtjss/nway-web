@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/color.css">
+<script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+</head>
+<body>
+	<form id="ff" action="">
+		<input type="hidden" name="id" value="">
+		<table>
+			<tr>
+				<th>标题</th>
+				<td><input name="name"></td>
+			</tr>
+			<tr>
+				<th>内容</th>
+				<td><textarea name="description" rows="30" cols="70"></textarea></td>
+			</tr>
+		</table>
+	</form>
+	
+	<script type="text/javascript">
+		$('#ff').form('load','/generic/detail?mapper=demoMapper&id=1');
+	</script>
+</body>
+</html>

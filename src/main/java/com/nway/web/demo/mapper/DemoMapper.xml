@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nway.web.demo.mapper.DemoMapper">
+	<select id="list" resultType="map">
+		select * From scheme
+	</select>
+	<select id="getById" resultType="map">
+		select * From scheme where id = #{id}
+	</select>
+	<insert id="add">
+		insert into scheme (id,name,description) values (#{id},#{name},#{description}) 
+	</insert>
+	<update id="update">
+		update scheme set time = now(),name = #{name} where id = #{id}
+	</update>
+	<update id="removeById">
+		update scheme set valid = 0 where id = #{id}
+	</update>
+</mapper>

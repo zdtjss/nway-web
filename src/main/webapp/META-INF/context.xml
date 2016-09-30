@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+	<Resource name="jdbc/nway-web" auth="Container" type="javax.sql.DataSource"
+		maxTotal="10" maxIdle="3" maxWaitMillis="10000" username="root"
+		password="123" driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/test?cacheResultSetMetadata=true&amp;metadataCacheSize=10" />
+</Context>
