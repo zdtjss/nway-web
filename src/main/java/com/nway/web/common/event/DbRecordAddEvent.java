@@ -2,19 +2,13 @@ package com.nway.web.common.event;
 
 import java.util.Map;
 
-import org.springframework.context.ApplicationEvent;
-
-public class DbRecordAddEvent extends ApplicationEvent {
+public class DbRecordAddEvent extends GenericEvent {
 
 	private static final long serialVersionUID = 1819246511527898381L;
 
-	public DbRecordAddEvent(Object source) {
-		
+	public DbRecordAddEvent(Map<String, String> source) {
+
 		super(source);
 	}
 
-	public Map<String,String> getSource() {
-		
-		return (Map) super.getSource();
-	}
 }

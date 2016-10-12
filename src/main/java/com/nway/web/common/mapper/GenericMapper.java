@@ -1,6 +1,5 @@
 package com.nway.web.common.mapper;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
@@ -11,7 +10,7 @@ public interface GenericMapper {
 
 	Page<Object> list(Map<String, String> param, RowBounds rowBounds);
 	
-	Object getById(Serializable id);
+	Object getById(long id);
 	
 	int add(Map<String, String> param);
 	

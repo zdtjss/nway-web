@@ -58,6 +58,10 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="operation" />
 	</aop:config>
 
+	<bean id="sqlExecutor" class="com.nway.spring.jdbc.SqlExecutor">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations">
@@ -70,8 +74,8 @@
 				<bean class="com.github.pagehelper.PageHelper">
 					<property name="sqlUtilConfig">
 						<bean class="com.github.pagehelper.SqlUtilConfig">
-							<property name="dialect" value="mysql"/>
-							<property name="rowBoundsWithCount" value="true"/>
+							<property name="dialect" value="mysql" />
+							<property name="rowBoundsWithCount" value="true" />
 						</bean>
 					</property>
 				</bean>

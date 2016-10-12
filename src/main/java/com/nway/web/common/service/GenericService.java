@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import com.github.pagehelper.Page;
 import com.nway.web.common.event.DbRecordAddEvent;
 import com.nway.web.common.event.DbRecordRemoveEvent;
 import com.nway.web.common.event.DbRecordUpdateEvent;
+import com.nway.web.common.event.EventPublisher;
 import com.nway.web.common.mapper.GenericMapper;
 
 @Service
@@ -23,31 +25,35 @@ public class GenericService implements ApplicationContextAware, InitializingBean
 
 	private ApplicationContext applicationContext;
 
+	@Autowired
+	private EventPublisher eventPublisher;
+
 	public Object list(Map<String, String[]> requestParam) {
 
 		Map<String, String> queryParam = reformRequestParam(requestParam);
 
-		String mapperName = queryParam.get("mapper");
-		
+		String mapperName = getMapperName(requestParam);
+
 		String pageStr = queryParam.get("page");
-		
+
 		String pageSizeStr = queryParam.get("rows");
 
 		// 页面数据量
-		int limit = isBlank(pageSizeStr) ? RowBounds.NO_ROW_LIMIT : Integer.parseInt(queryParam.get("rows"));
+		int limit = isBlank(pageSizeStr) ? RowBounds.NO_ROW_LIMIT
+				: Integer.parseInt(queryParam.get("rows"));
 
 		// 第一页是 1
-		int offset = isBlank(pageStr) ? RowBounds.NO_ROW_OFFSET : Integer.parseInt(pageStr) * limit;
-				
+		int offset = isBlank(pageStr) ? RowBounds.NO_ROW_OFFSET : (Integer.parseInt(pageStr) - 1) * limit;
+
 		RowBounds rowBounds = new RowBounds(offset, limit);
 
 		Page<Object> data = mappers.get(mapperName).list(queryParam, rowBounds);
-		
-		Map<String,Object> pageData = new HashMap<>();
-		
+
+		Map<String, Object> pageData = new HashMap<>();
+
 		pageData.put("total", data.getTotal());
 		pageData.put("rows", data.getResult());
-		
+
 		return pageData;
 	}
 
@@ -57,8 +63,12 @@ public class GenericService implements ApplicationContextAware, InitializingBean
 	 * @param requestParam
 	 * @return
 	 */
-	public Object get(String mapperName, long id) {
+	public Object get(Map<String, String[]> requestParam) {
 
+		String mapperName = getMapperName(requestParam);
+		
+		long id = Long.parseLong(requestParam.get("id")[0]);
+		
 		return mappers.get(mapperName).getById(id);
 	}
 
@@ -66,32 +76,32 @@ public class GenericService implements ApplicationContextAware, InitializingBean
 
 		Map<String, String> queryParam = reformRequestParam(requestParam);
 
-		String mapperName = queryParam.get("mapper");
+		String mapperName = getMapperName(requestParam);
 
 		int effectCount = mappers.get(mapperName).add(queryParam);
-		
+
 		if (effectCount != 1) {
 
 			throw new RuntimeException("数据保存失败 {} " + queryParam);
 		}
-		
-		this.applicationContext.publishEvent(new DbRecordAddEvent(queryParam));
+
+		eventPublisher.publishEvent(new DbRecordAddEvent(queryParam));
 	}
-	
+
 	public void update(Map<String, String[]> requestParam) {
-		
+
 		Map<String, String> queryParam = reformRequestParam(requestParam);
-		
-		String mapperName = queryParam.get("mapper");
-		
+
+		String mapperName = getMapperName(requestParam);
+
 		int effectCount = mappers.get(mapperName).update(queryParam);
-		
+
 		if (effectCount <= 0) {
-			
+
 			throw new RuntimeException("数据更新失败 {} " + queryParam);
 		}
-		
-		this.applicationContext.publishEvent(new DbRecordUpdateEvent(queryParam));
+
+		eventPublisher.publishEvent(new DbRecordUpdateEvent(queryParam));
 	}
 
 	/**
@@ -99,21 +109,22 @@ public class GenericService implements ApplicationContextAware, InitializingBean
 	 * 
 	 * @param requestParam
 	 */
-	public void remove(String mapperName, String ids) {
+	public void remove(Map<String, String[]> requestParam) {
 
+		String mapperName = getMapperName(requestParam);
+		
+		Map<String, String> queryParam = reformRequestParam(requestParam);
+		
+		String ids = queryParam.get("ids");
+		
 		int effectCount = mappers.get(mapperName).removeById(ids);
 
 		if (ids.split(",").length != effectCount) {
 
 			throw new RuntimeException("数据删除失败 {} " + mapperName + "\t" + ids);
 		}
-		
-		Map<String,String> queryParam = new HashMap<>();
-		
-		queryParam.put("mapper", mapperName);
-		queryParam.put("ids", ids);
-		
-		this.applicationContext.publishEvent(new DbRecordRemoveEvent(queryParam));
+
+		eventPublisher.publishEvent(new DbRecordRemoveEvent(queryParam));
 	}
 
 	@Override
@@ -138,6 +149,11 @@ public class GenericService implements ApplicationContextAware, InitializingBean
 		});
 
 		return reformedMap;
+	}
+
+	private String getMapperName(Map<String, String[]> requestParam) {
+
+		return requestParam.get("module")[0] + "Mapper";
 	}
 	
 	private String join(String[] array) {

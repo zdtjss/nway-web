@@ -15,7 +15,7 @@
 
 	<script type="text/javascript">
 		$('#dg').datagrid({
-			url : '/generic/list?mapper=demoMapper',
+			url : '/generic/list?module=demo',
 			method : 'get',
 			autoRowHeight : false,
 			striped : false,
@@ -43,7 +43,7 @@
 								$("#ff").form("submit",{
 									url : "/generic/update",
 									queryParams : {
-										mapper : 'demoMapper'
+										module : 'demo'
 									},
 									onSubmit: function(param) {
 								    },

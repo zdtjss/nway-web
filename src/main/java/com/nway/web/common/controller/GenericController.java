@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nway.web.common.service.GenericService;
 
+
 @RestController
 @RequestMapping("generic")
 public class GenericController {
@@ -19,7 +20,11 @@ public class GenericController {
 	private GenericService genericService;
 	
 	/**
-	 * 请求参数：mapper（MyBatis mapper名称，必须）
+	 * 请求参数： <br>
+	 * 
+	 * page ： 要显示第几页的数据 <br>
+	 * rows ： 页面最大数据量<br>
+	 * module :（模块名称，Mybatis mapper名称基于此参数+Mapper） <br>
 	 * 
 	 * @param request
 	 * @return
@@ -30,14 +35,20 @@ public class GenericController {
 		return genericService.list(request.getParameterMap());
 	}
 
+	/**
+	 * module :（模块名称，Mybatis mapper名称基于此参数+Mapper） <br>
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("detail")
-	public Object detail(String mapper, long id) {
+	public Object detail(HttpServletRequest request) {
 
-		return genericService.get(mapper, id);
+		return genericService.get(request.getParameterMap());
 	}
 
 	/**
-	 * 请求参数：mapper（MyBatis mapper名称，必须）
+	 * module :（模块名称，Mybatis mapper名称基于此参数+Mapper） <br>
 	 * 
 	 * @param request
 	 * @return
@@ -51,7 +62,7 @@ public class GenericController {
 	}
 	
 	/**
-	 * 请求参数：mapper（MyBatis mapper名称，必须）
+	 * module :（模块名称，Mybatis mapper名称基于此参数+Mapper） <br>
 	 * 
 	 * @param request
 	 * @return
@@ -64,10 +75,16 @@ public class GenericController {
 		return Collections.singletonMap("code", 200);
 	}
 
+	/**
+	 * module :（模块名称，Mybatis mapper名称基于此参数+Mapper） <br>
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("remove")
-	public Map<String, Integer> remove(String mapper, String ids) {
+	public Map<String, Integer> remove(HttpServletRequest request) {
 
-		genericService.remove(mapper, ids);
+		genericService.remove(request.getParameterMap());
 		
 		return Collections.singletonMap("code", 200);
 	}

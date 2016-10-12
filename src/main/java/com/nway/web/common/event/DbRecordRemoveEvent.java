@@ -2,18 +2,12 @@ package com.nway.web.common.event;
 
 import java.util.Map;
 
-import org.springframework.context.ApplicationEvent;
-
-public class DbRecordRemoveEvent extends ApplicationEvent {
+public class DbRecordRemoveEvent extends GenericEvent {
 
 	private static final long serialVersionUID = -708006937160972145L;
 
-	public DbRecordRemoveEvent(Object source) {
+	public DbRecordRemoveEvent(Map<String, String> source) {
+
 		super(source);
-	}
-
-	public Map<String, String> getSource() {
-
-		return (Map) super.getSource();
 	}
 }
