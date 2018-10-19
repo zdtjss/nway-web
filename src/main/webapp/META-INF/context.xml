@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-	<Resource name="jdbc/nway-web" auth="Container" type="javax.sql.DataSource"
-		maxTotal="10" maxIdle="3" maxWaitMillis="10000" username="root"
-		password="123" driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/test?cacheResultSetMetadata=true&amp;metadataCacheSize=10" />
+	<Resource auth="Container"
+		name="jdbc/nway-web"
+		type="javax.sql.DataSource"
+		initialSize="3"
+		maxTotal="5"
+		maxIdle="30"
+	    maxWaitMillis="10000"
+		username="SA"
+		password=""
+		driverClassName="org.hsqldb.jdbc.JDBCDriver"
+		url="jdbc:hsqldb:mem:.;sql.syntax_mys=true;"/>
 </Context>

@@ -6,14 +6,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nway.web.common.service.GenericService;
 
-
 @RestController
-@RequestMapping("generic")
+@RequestMapping("/generic")
 public class GenericController {
 
 	@Autowired
@@ -29,8 +29,8 @@ public class GenericController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("list")
-	public Object list(HttpServletRequest request) {
+	@RequestMapping("/{moduleName}/list")
+	public Object list(HttpServletRequest request, @PathVariable String moduleName) {
 
 		return genericService.list(request.getParameterMap());
 	}
@@ -41,8 +41,8 @@ public class GenericController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("detail")
-	public Object detail(HttpServletRequest request) {
+	@RequestMapping("/{moduleName}/detail")
+	public Object detail(HttpServletRequest request, @PathVariable String moduleName) {
 
 		return genericService.get(request.getParameterMap());
 	}
@@ -53,8 +53,8 @@ public class GenericController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("add")
-	public Map<String, Integer> add(HttpServletRequest request) {
+	@RequestMapping("/{moduleName}/add")
+	public Map<String, Integer> add(HttpServletRequest request, @PathVariable String moduleName) {
 
 		genericService.add(request.getParameterMap());
 		
@@ -67,8 +67,8 @@ public class GenericController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("update")
-	public Map<String, Integer> update(HttpServletRequest request) {
+	@RequestMapping("/{moduleName}/update")
+	public Map<String, Integer> update(HttpServletRequest request, @PathVariable String moduleName) {
 		
 		genericService.update(request.getParameterMap());
 		
@@ -81,8 +81,8 @@ public class GenericController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("remove")
-	public Map<String, Integer> remove(HttpServletRequest request) {
+	@RequestMapping("/{moduleName}/remove")
+	public Map<String, Integer> remove(HttpServletRequest request, @PathVariable String moduleName) {
 
 		genericService.remove(request.getParameterMap());
 		
